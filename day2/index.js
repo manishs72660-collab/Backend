@@ -6,10 +6,10 @@ const server=http.createServer((req,res)=>{
         res.end("Hello Coder");
     }
     else if(req.url==="/contact"){
-        res.end("This is our Contact Page")
+        res.end("This is our Contact Page");
     }
     else if(req.url==="/about"){
-        res.end("This is our About Page")
+        res.end("This is our About Page");
     }
     else
     {
