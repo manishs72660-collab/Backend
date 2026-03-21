@@ -17,9 +17,20 @@ let bookstore = [
 
 app.use(express.json());
 
-app.get("/book",(req,res)=>{
-    res.send(bookstore);
-})
+app.get("/book", (req, res) => {
+    const { author, book } = req.query;
+    let result = bookstore;
+
+    if (author) {
+        result = result.filter(item => item.author === author);
+    }
+
+    if (book) {
+        result = result.filter(item => item.book === book);
+    }
+
+    res.send(result);
+});
 
 app.get("/book/:id",(req,res)=>{
     const id=parseInt(req.params.id);
@@ -29,24 +40,63 @@ app.get("/book/:id",(req,res)=>{
 
 
 app.post("/book",(req,res)=>{
-    bookstore.push(req.body);
-    // console.log(req.body);
-    res.send("data saved sucessfully");
+    const data=req.body;
+    if(!data.id){
+        res.send("id is missing");
+    }else if(!(data.book || data.bookname)){
+        res.send("book name is missing");
+    }else if(!(data.author||data.name)){
+        res.send("author name is missing")
+    }else if(bookstore.some(obj => obj.id === data.id)){
+         res.send("data is already present");
+    }else{
+        bookstore.push(data);
+        res.send("data saved sucessfully");
+    }
 })
 
 app.put("/book/:id",(req,res)=>{
     const id=req.body.id;
+    const data=req.body;
     const book=bookstore.find((info)=>info.id==id);
-    book.author=req.body.author;
-    res.send("data change sucessfully");
-})
+    if(!data.id){
+        res.send("id is missing");
+    }else if(data.author&&data.book){
+        book.author=data.author;
+        book.book=data.book;
+        res.send("author and book is updated");
+    }else if(data.author||data.name){
+        if(data.author){
+            book.author=data.author;
+            res.send("author name updated");
+        }else{
+            book.author=data.name;
+            res.send()
+        }
+    }else if(data.book||data.bookname){
+        if(data.book){
+            book.book=data.book;
+            res.send("book name updated");
+        }else{
+            book.book=data.bookname;
+            res.send("bookname is updated");
+        }
+    }else{
 
-app.patch("/book/:id",(req,res)=>{
-    res.send("all data change sucessfully");
+    }
+    // book.author=req.body.author;
+    // res.send("data change sucessfully");
 })
 
 app.delete("/book/:id",(req,res)=>{
+    const id=parseInt(req.params.id);
+    if(bookstore.some(obj => obj.id === id)){
+    const updatebookstore=bookstore.filter((info)=>info.id!=id)
+    bookstore=updatebookstore;
     res.send("data delete sucessfully");
+    }else{
+        res.send("data is already delete");
+    }
 })
 
 app.listen(4000,()=>{
