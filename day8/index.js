@@ -4,8 +4,8 @@ const { MongoClient } = require('mongodb');
 // import { MongoClient } from 'mongodb'
 
 // Connection URL
-// const url = 'mongodb+srv://manishsingh:8294068776@codingadda.bzyu9qj.mongodb.net/';
-const url="mongodb+srv://manishsingh:8294068776@codingadda.bzyu9qj.mongodb.net/?appName=codingadda";
+// const url = 'mongodb+srv://manishsingh:<password>@codingadda.bzyu9qj.mongodb.net/';
+const url="mongodb+srv://manishsingh:<password>@codingadda.bzyu9qj.mongodb.net/?appName=codingadda";
 const client = new MongoClient(url);
 
 // Database Name
